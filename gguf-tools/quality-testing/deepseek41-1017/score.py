@@ -176,6 +176,13 @@ def render_report(summary):
               'Panels have overlapping histories; there is no combined quality percentage. Long-generation panels teacher-force saved native continuations rather than measure independent candidate task success. The four long native traces reached their 4,096-token caps.', '',
               f"Complete selected suite: `{summary['complete_selected_suite']}`. All nine full panels compared: `{summary['all_nine_panels_complete']}`."]
     for name, score in summary['panels'].items():
+        for prefix,title in [('group:','task groups'),('position_kind:','scored-position types')]:
+            rows=[(key[len(prefix):],value) for key,value in score['groups'].items() if key.startswith(prefix)]
+            if len(rows)>1:
+                lines += ['',f'## {name}: {title}','','| Group | Cases | Positions | ΔNLL | Forward KL | Top-token agreement |','| --- | ---: | ---: | ---: | ---: | ---: |']
+                for group,row in sorted(rows):
+                    m=row['metrics']
+                    lines.append(f"| {group} | {row['cases']} | {row['positions']:,} | {m['nll_delta']['token_weighted_mean']:+.6f} | {m['forward_kl']['token_weighted_mean']:.6f} | {100*m['top1_same']['token_weighted_mean']:.2f}% |")
         buckets = [(key, value) for key, value in score['groups'].items() if key.startswith('context:')]
         if buckets:
             lines += ['', f'## {name}: context buckets', '', '| Tokens | Cases | Forward KL | Top-token agreement |', '| ---: | ---: | ---: | ---: |']

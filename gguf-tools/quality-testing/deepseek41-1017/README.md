@@ -44,7 +44,7 @@ Resume with the same command plus `--resume`. Completed panels are reused. A suc
 
 ## Results
 
-Open `report.md` for panel NLL, ΔNLL, forward KL and strict top-token agreement, with context-bucket and image-aligner summaries. `summary.json` and each panel's `SCORE.json` retain Jensen–Shannon divergence, total variation, entropy, probability regret, centered-logit RMSE, case-bootstrap confidence intervals and worst cases. Per-position arrays and raw full-vocabulary logits are retained.
+Open `report.md` for panel NLL, ΔNLL, forward KL and strict top-token agreement, with task-group, context-bucket, scored-position-type and image-aligner summaries. Rows weight scored positions; groups can have very different token counts, which are shown explicitly. `summary.json` and each panel's `SCORE.json` retain Jensen–Shannon divergence, total variation, entropy, probability regret, centered-logit RMSE, case-bootstrap confidence intervals and worst cases. Per-position arrays and raw full-vocabulary logits are retained.
 
 Missing cases, wrong token IDs/positions, nonfinite vectors, changed files and mismatched checkpoint identities are errors. There is no combined quality percentage or universal pass threshold. Results include both quantization and runtime arithmetic. Image results include the complete preprocessing/encoder pipeline; aligner cosine/RMSE compare natural features before prompt-sentinel insertion.
 
