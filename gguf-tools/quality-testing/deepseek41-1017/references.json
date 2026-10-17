@@ -1,0 +1,82 @@
+{
+  "schema": "deepseek-v4.1-flash-1017.deep-reference-manifest.v1",
+  "model_repo": "deepseek-ai/DeepSeek-V4.1-Flash-1017",
+  "model_revision": "1bae0e1088993b9b82de08f59de5be5a34e42170",
+  "vocab": 129280,
+  "images_path": "vision-assets",
+  "panels": {
+    "short100": {
+      "path": "short100",
+      "cases": 100,
+      "positions": 6159,
+      "context": 1024,
+      "collection_sha256": "f01b4d6ac2a5ea03f0851a19c4ffb1b5e6da998fecb518a5d6d00e5ce917e2ef",
+      "case_manifest_sha256": "f5ecc6b9d96a4a0ff041b41236a3d9e3f415624d54dc73e919f37de9bfcbbf3e"
+    },
+    "expanded900-combined": {
+      "path": "expanded900-combined",
+      "cases": 900,
+      "positions": 36697,
+      "context": 1024,
+      "collection_sha256": "d3149046f66ed0ba91798a033568ae4144214db55a0937085ee975b2cf6380c9",
+      "case_manifest_sha256": "9c9c512afb2b0d15913b88f6ba9f37f573f76a5f288d2946471e34292aad3ea6"
+    },
+    "vision32": {
+      "path": "vision32",
+      "cases": 32,
+      "positions": 252,
+      "context": 1024,
+      "collection_sha256": "a9b7c8806b3cb90cea933a2e873dfcc8ce3fac8717b1f4fbd61179d2d024e5ac",
+      "case_manifest_sha256": "bfaaa3a1be1b142e0a3e478337b1934d4f8dfddae2e6540db473031eebccd02c"
+    },
+    "compatibility-long12": {
+      "path": "compatibility-long12",
+      "cases": 12,
+      "positions": 763,
+      "context": 23808,
+      "collection_sha256": "f5a2d2d82bce1322269c2335db49a0f0d7b26ec005cf4ef89dfc44858fbd8965",
+      "case_manifest_sha256": "c5670e7f90e3cdd1d1874d5501770128ebc1b052ecf773f399ca8ec3a3834c0a"
+    },
+    "generation-long4": {
+      "path": "generation-long4",
+      "cases": 4,
+      "positions": 16384,
+      "context": 4608,
+      "collection_sha256": "f257d906fe516b4a3c3022d80f3243aebd85ef013a885b5a4c8a7be4138121e3",
+      "case_manifest_sha256": "e5c32a654946d6bca5002ed9dadfd72edd4c832dc90cb7c19a5b89aaa8cb3233"
+    },
+    "long-fixed8": {
+      "path": "long-fixed8",
+      "cases": 8,
+      "positions": 49152,
+      "context": 8960,
+      "collection_sha256": "56074671f6323337f167f947181db4aea02945b2f460d2fd8b5b405ae71e0236",
+      "case_manifest_sha256": "e5c32a654946d6bca5002ed9dadfd72edd4c832dc90cb7c19a5b89aaa8cb3233"
+    },
+    "deep36": {
+      "path": "deep36",
+      "cases": 36,
+      "positions": 13824,
+      "context": 131328,
+      "collection_sha256": "43a666f7dc309b2c324a1dc172b059e6c67846970519b423f219fb7b1291667f",
+      "case_manifest_sha256": "b3983151ace211efb9420b4cbe02b681d661e5ca46384efd878f59b087113b45"
+    },
+    "generation-pilot": {
+      "path": "generation-pilot",
+      "cases": 1,
+      "positions": 128,
+      "context": 1024,
+      "collection_sha256": "da727e97070c0ec58734b364767ee253f90a6eb32133e4c31902c97d56be69bd",
+      "case_manifest_sha256": "e5c32a654946d6bca5002ed9dadfd72edd4c832dc90cb7c19a5b89aaa8cb3233"
+    },
+    "control-pilot-prefill": {
+      "path": "control-pilot-prefill",
+      "cases": 1,
+      "positions": 128,
+      "context": 1024,
+      "collection_sha256": "52a6f395d778a82df9853993e5ab591196aba5f8b944eeef2c024e7cb740c075",
+      "case_manifest_sha256": "afd92d19dbdbc10c67006afad59cf75e8542918436d9795f308f17292fafd318"
+    }
+  },
+  "interpretation": "Panel case counts include overlapping pilot/control histories. Full reference vectors use original mixedFP8/FP4 weights, not a BF16 replacement or hosted top-N approximation."
+}

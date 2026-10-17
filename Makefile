@@ -1301,3 +1301,23 @@ ds4-kernel-v41-gate-up-oracle: tests/test_v41_gate_up_oracle.rocm.o $(ROCM_MMQ_O
 
 tests/test_v41_gate_up_oracle.rocm.o: tests/test_v41_gate_up_oracle.hip tests/v41_gate_up_oracle_grid.hpp rocm/ds4_rocm_v41_gate_up.h
 	$(HIPCC) $(ROCM_MMQ_FLAGS) -I. -c -o $@ $<
+
+# Checkpoint-pinned full-distribution scorer; separate from score_official.
+DEEP_SCORE_DIR := gguf-tools/quality-testing/deepseek41-1017
+DEEP_SCORE_SOURCE ?= $(shell git describe --always --dirty 2>/dev/null || echo source-export)
+.PHONY: deep-score-rocm deep-score-force
+
+deep-score-rocm:
+	$(MAKE) -B $(DEEP_SCORE_DIR)/score_native $(DEEP_SCORE_DIR)/image_probe \
+		CORE_OBJS="ds4.o ds4_image.o ds4_distributed.o ds4_tp.o ds4_ssd.o ds4_rocm.o ds4_rocm_compat.o ds4_rocm_unavailable.o ds4_layer_pack.o ds4_engram.o $(ROCM_MMQ_OBJS) $(ROCM_HALO_OBJS)" \
+		CFLAGS="$(CFLAGS) $(ROCM_HOST_CFLAGS) -DDS4_ROCM_BUILD" \
+		DS4_LINK="$(HIPCC) $(ROCM_CFLAGS)" DS4_LINK_LIBS="$(ROCM_LDLIBS)"
+
+$(DEEP_SCORE_DIR)/score_native.o: $(DEEP_SCORE_DIR)/score_native.c ds4.h deep-score-force
+	$(CC) $(filter-out -ffast-math,$(QUALITY_CFLAGS)) $(ROCM_HOST_CFLAGS) -DDS41_BUILD_SOURCE='"$(DEEP_SCORE_SOURCE)"' -I. -c -o $@ $<
+
+$(DEEP_SCORE_DIR)/score_native: $(DEEP_SCORE_DIR)/score_native.o $(CORE_OBJS) rax.o ds4_gpu_args.o
+	$(DS4_LINK) -o $@ $^ $(DS4_LINK_LIBS)
+
+$(DEEP_SCORE_DIR)/image_probe: $(DEEP_SCORE_DIR)/image_probe.c ds4_image.o deep-score-force
+	$(CC) $(filter-out -ffast-math,$(QUALITY_CFLAGS)) $(ROCM_HOST_CFLAGS) -DDS41_BUILD_SOURCE='"$(DEEP_SCORE_SOURCE)"' -I. -o $@ $< ds4_image.o -lm

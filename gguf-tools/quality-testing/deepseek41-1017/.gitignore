@@ -1,0 +1,6 @@
+/score_native
+/image_probe
+*.o
+__pycache__/
+/runs/
+/references/

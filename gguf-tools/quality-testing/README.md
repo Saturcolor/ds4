@@ -3,6 +3,8 @@
 This directory contains the prompts, tracked official fixtures, and scripts used
 to compare local GGUF variants against hosted-model continuations.
 
+For DeepSeek V4.1 Flash 1017 full-vocabulary native-reference comparisons, use the separate [1017 deep scorer](deepseek41-1017/README.md). It covers text, vision, long continuations and 4K–128K contexts with frozen references stored outside Git.
+
 The main metric is target-token negative log likelihood: collect an
 official continuation, then ask each local GGUF how much probability it assigns
 to that exact continuation token by token.  This avoids judging quality from one

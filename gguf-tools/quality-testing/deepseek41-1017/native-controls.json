@@ -1,0 +1,75 @@
+{
+  "model_revision": "1bae0e1088993b9b82de08f59de5be5a34e42170",
+  "reference_only": true,
+  "interpretation": "These measured native runtime controls describe the reference. They are not candidate tests, universal error floors or values to subtract from quantization divergence.",
+  "controls": {
+    "bounded-native": {
+      "positions": 64,
+      "metrics": {
+        "native_nll": 0.42720143846522846,
+        "candidate_nll": 0.42720143846522846,
+        "nll_delta": 0.0,
+        "forward_kl": 0.0,
+        "jensen_shannon": 0.0,
+        "total_variation": 0.0,
+        "native_entropy": 0.3397105718043619,
+        "candidate_entropy": 0.3397105718043619,
+        "top1_same": 1.0,
+        "native_top1_margin": 7.437981337308884,
+        "native_probability_regret": 0.0,
+        "centered_logit_rmse": 0.0
+      }
+    },
+    "cached-native": {
+      "positions": 64,
+      "metrics": {
+        "native_nll": 0.42720143846522846,
+        "candidate_nll": 0.42720143846522846,
+        "nll_delta": 0.0,
+        "forward_kl": 0.0,
+        "jensen_shannon": 0.0,
+        "total_variation": 0.0,
+        "native_entropy": 0.3397105718043619,
+        "candidate_entropy": 0.3397105718043619,
+        "top1_same": 1.0,
+        "native_top1_margin": 7.437981337308884,
+        "native_probability_regret": 0.0,
+        "centered_logit_rmse": 0.0
+      }
+    },
+    "combined-ffn-native": {
+      "positions": 64,
+      "metrics": {
+        "native_nll": 0.42720143846522846,
+        "candidate_nll": 0.44196905758229177,
+        "nll_delta": 0.014767619117063313,
+        "forward_kl": 0.009354612058234391,
+        "jensen_shannon": 0.00222330133921801,
+        "total_variation": 0.02963528447145795,
+        "native_entropy": 0.3397105718043619,
+        "candidate_entropy": 0.3251846423220951,
+        "top1_same": 0.953125,
+        "native_top1_margin": 7.437981337308884,
+        "native_probability_regret": 0.0019821080777037573,
+        "centered_logit_rmse": 0.28747778620248116
+      }
+    },
+    "native-prefill-vs-decode": {
+      "positions": 128,
+      "metrics": {
+        "native_nll": 0.5227550895418599,
+        "candidate_nll": 0.5119116160916145,
+        "nll_delta": -0.010843473450245389,
+        "forward_kl": 0.00888044934866324,
+        "jensen_shannon": 0.0022105034986796657,
+        "total_variation": 0.02991783194627299,
+        "native_entropy": 0.564099187494549,
+        "candidate_entropy": 0.570429502789062,
+        "top1_same": 0.921875,
+        "native_top1_margin": 4.659367345273495,
+        "native_probability_regret": 0.00730582872403046,
+        "centered_logit_rmse": 0.3049846946056246
+      }
+    }
+  }
+}
