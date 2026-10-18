@@ -26,7 +26,7 @@ python3 gguf-tools/quality-testing/deepseek41-1017/score.py \
   --references /path/1017-references --out /path/results
 ```
 
-The default is all nine panels, sequentially. Run with the GPU available for this model. The reference runtime and original native model weights are not needed; no API key, hosted inference or paid server is used. GGUF checks read metadata and file stats, without an independent full-model checksum pass.
+The default is the routine 100-case short panel. Run with the GPU available for this model. The reference runtime and original native model weights are not needed; no API key, hosted inference or paid server is used. GGUF checks read metadata and file stats, without an independent full-model checksum pass.
 
 | Suite | Coverage | Cases | Scored positions |
 | --- | --- | ---: | ---: |
@@ -38,13 +38,15 @@ The default is all nine panels, sequentially. Run with the GPU available for thi
 | `controls` | Native generation pilot and prefill control on the same 128-token history | 2 | 256 |
 | `all` | All nine panels | 1,094 | 123,487 |
 
-For a shorter run, add `--suite short`. Select individual panels with repeated `--panel`, for example `--panel compatibility-long12`. For an explicit smoke subset, add `--limit 1`; the report marks it as partial coverage. Full long/deep runs can take hours. Candidate raw logits use about 64 GB for all panels and remain available for later analysis.
+Use `--suite vision`, `--suite long` or `--suite deep` when those features need checking; `--suite all` explicitly selects all nine panels. Select individual panels with repeated `--panel`, for example `--panel compatibility-long12`. For an explicit smoke subset, add `--limit 1`; the report marks it as partial coverage. Long/deep suites repeat long prefills and can take much longer than the routine panel. Candidate raw logits use about 64 GB for all panels and remain available for later analysis.
 
 Resume with the same command plus `--resume`. Completed panels are reused. A successful native collection can be compared again without rerunning inference; interrupted collections are retained in separate attempts. There is no inference timeout. Ctrl-C preserves evidence and stops the owned native process.
 
 ## Results
 
 Open `report.md` for panel NLL, ΔNLL, forward KL and strict top-token agreement, with task-group, context-bucket, scored-position-type and image-aligner summaries. Rows weight scored positions; groups can have very different token counts, which are shown explicitly. `summary.json` and each panel's `SCORE.json` retain Jensen–Shannon divergence, total variation, entropy, probability regret, centered-logit RMSE, case-bootstrap confidence intervals and worst cases. Per-position arrays and raw full-vocabulary logits are retained.
+
+NLL has the same meaning as the original scorer's `avg_nll`: average negative log probability of the frozen continuation tokens. The short panel reuses the V4.1 Flash September 19 prompts/continuations, with exact official 1017 token IDs and new 1017 native reference logits. Compare GGUFs on these same frozen targets and settings; historical scores from another checkpoint or tokenizer are not interchangeable. ΔNLL is candidate minus native NLL; positive means less probability assigned to the reference targets. Top-token agreement is a separate distribution check, not the percentage of correct answers.
 
 Missing cases, wrong token IDs/positions, nonfinite vectors, changed files and mismatched checkpoint identities are errors. There is no combined quality percentage or universal pass threshold. Results include both quantization and runtime arithmetic. Image results include the complete preprocessing/encoder pipeline; aligner cosine/RMSE compare natural features before prompt-sentinel insertion.
 

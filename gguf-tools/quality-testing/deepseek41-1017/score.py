@@ -212,7 +212,8 @@ def main():
     parser.add_argument('--images', type=Path, help='Image asset root; defaults to REFERENCES/vision-assets')
     parser.add_argument('--out', type=Path, required=True)
     selection=parser.add_mutually_exclusive_group()
-    selection.add_argument('--suite', choices=SUITES, default='all')
+    selection.add_argument('--suite', choices=SUITES, default='short',
+                           help='Panel suite; defaults to the routine 100-case short comparison')
     selection.add_argument('--panel',choices=SUITES['all'],action='append',help='Select one or more complete panels explicitly')
     parser.add_argument('--native', type=Path, default=HERE/'score_native')
     parser.add_argument('--probe', type=Path, default=HERE/'image_probe')
