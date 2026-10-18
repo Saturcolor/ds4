@@ -1,0 +1,127 @@
+{
+  "schema": "deepseek41-1017.reference-archives.v1",
+  "repo_id": "kyuz0/deepseek-v4.1-flash-1017-qa",
+  "model_revision": "1bae0e1088993b9b82de08f59de5be5a34e42170",
+  "archives": {
+    "short100": {
+      "path": "panels/short100.tar.zst",
+      "archive_bytes": 3001895961,
+      "unpacked_bytes": 3300163764,
+      "files": 4302,
+      "collection_sha256": "f01b4d6ac2a5ea03f0851a19c4ffb1b5e6da998fecb518a5d6d00e5ce917e2ef",
+      "cases": 100,
+      "positions": 6159,
+      "commit": "803011c8c578303d3299b4189f56d73907b87829",
+      "sha256": "f1c34761d481b21630ebb5861293803c60f48a4ab6642211fca57244fe26c2bc"
+    },
+    "vision32": {
+      "path": "panels/vision32.tar.zst",
+      "archive_bytes": 440780672,
+      "unpacked_bytes": 541966074,
+      "files": 1458,
+      "collection_sha256": "a9b7c8806b3cb90cea933a2e873dfcc8ce3fac8717b1f4fbd61179d2d024e5ac",
+      "cases": 32,
+      "positions": 252,
+      "commit": "841c9b160ccb8350d955f9bb92e7895336a85b31",
+      "sha256": "be8519c31fc4ce61bed0d65783cc511df1bca053e213230a045454b5fe081db0"
+    },
+    "compatibility-long12": {
+      "path": "panels/compatibility-long12.tar.zst",
+      "archive_bytes": 1246201913,
+      "unpacked_bytes": 1533689143,
+      "files": 518,
+      "collection_sha256": "f5a2d2d82bce1322269c2335db49a0f0d7b26ec005cf4ef89dfc44858fbd8965",
+      "cases": 12,
+      "positions": 763,
+      "commit": "1cf97d55fe455f2db11876d7437f87f86c0b6313",
+      "sha256": "3afdc1eeac3e423158ae51aa0fa17a2e025da1da6c57cc7805d52ab9960066da"
+    },
+    "generation-pilot": {
+      "path": "panels/generation-pilot.tar.zst",
+      "archive_bytes": 62836049,
+      "unpacked_bytes": 68590914,
+      "files": 49,
+      "collection_sha256": "da727e97070c0ec58734b364767ee253f90a6eb32133e4c31902c97d56be69bd",
+      "cases": 1,
+      "positions": 128,
+      "commit": "ec873e5f7cf31d6b0334305b9939cbca820a7e64",
+      "sha256": "075c89497fc46ed355380ccc03051b621a1071107e96a5f8a62d2411e88d4c72"
+    },
+    "control-pilot-prefill": {
+      "path": "panels/control-pilot-prefill.tar.zst",
+      "archive_bytes": 62871783,
+      "unpacked_bytes": 68589574,
+      "files": 46,
+      "collection_sha256": "52a6f395d778a82df9853993e5ab591196aba5f8b944eeef2c024e7cb740c075",
+      "cases": 1,
+      "positions": 128,
+      "commit": "eef7b32d695b1d72d02df6de7f065bc2a6f9dee6",
+      "sha256": "14640f4da359a520fc07eff083fd4d7d359bedec683c0928589d3326cbb3c56d"
+    },
+    "expanded900-combined": {
+      "path": "panels/expanded900-combined.tar.zst",
+      "archive_bytes": 18570192600,
+      "unpacked_bytes": 20583481917,
+      "files": 38932,
+      "collection_sha256": "d3149046f66ed0ba91798a033568ae4144214db55a0937085ee975b2cf6380c9",
+      "cases": 900,
+      "positions": 36697,
+      "commit": "da9cf1278bd7f52ef365ca1bbfb521edce70d90f",
+      "sha256": "5aacb759a111a5e6ff9f57c70fbbdf68dfaf9f36c1c9a56b839793efbedcd784"
+    },
+    "generation-long4": {
+      "path": "panels/generation-long4.tar.zst",
+      "archive_bytes": 7962087035,
+      "unpacked_bytes": 8673587553,
+      "files": 682,
+      "collection_sha256": "f257d906fe516b4a3c3022d80f3243aebd85ef013a885b5a4c8a7be4138121e3",
+      "cases": 4,
+      "positions": 16384,
+      "commit": "ae40cd57be7cb1342f515ebc9a3bcf1a8d4c72fb",
+      "sha256": "1c7f67c70350cdeec561a49e9def9482e39eb79940493bea16c13aeec60afd04"
+    },
+    "long-fixed8": {
+      "path": "panels/long-fixed8.tar.zst",
+      "archive_bytes": 23613821232,
+      "unpacked_bytes": 26037008374,
+      "files": 1106,
+      "collection_sha256": "56074671f6323337f167f947181db4aea02945b2f460d2fd8b5b405ae71e0236",
+      "cases": 8,
+      "positions": 49152,
+      "commit": "36979deedf504700dbc84f86dc3bc628e298e2e6",
+      "sha256": "744247ec48b79399048542dafac3b74a91e65392336f6ea9d7d1e1f34070e463"
+    },
+    "deep36": {
+      "path": "panels/deep36.tar.zst",
+      "archive_bytes": 18882458222,
+      "unpacked_bytes": 23051400147,
+      "files": 1730,
+      "collection_sha256": "43a666f7dc309b2c324a1dc172b059e6c67846970519b423f219fb7b1291667f",
+      "cases": 36,
+      "positions": 13824,
+      "commit": "b8a8f57b77aff4418a5b08f1a2103ecc1e6e6914",
+      "sha256": "faf1a01544cfc9abcb1625d31f029214f4b7d8390ca6ffb201644de57a9385fc"
+    },
+    "vision-assets": {
+      "path": "assets/vision-assets.tar.zst",
+      "archive_bytes": 548911,
+      "unpacked_bytes": 660134,
+      "files": 40,
+      "sha256": "3d1fdf8f0bb9ccc1e16e7b05bf1a9c9690a1eaaf1ed7d7e043fe614250b53978"
+    }
+  },
+  "shared_head": {
+    "path": "diagnostics/native-head.safetensors",
+    "bytes": 1323827288,
+    "sha256": "6e740c16a2697b37832d3ad86e23b108cc4834435315e23e2993c53c01ef5e49",
+    "commit": "50f3fb6438b7a5b0871078ba6ca9d9dbd19474ca"
+  },
+  "diagnostic_files": [
+    {
+      "path": "diagnostics/native-controls-v1.tar.gz",
+      "bytes": 157106223,
+      "sha256": "3983e884a6483b1d9fcf287b5382d500c0512f464aaaa835a52e694949a081d5"
+    }
+  ],
+  "revision": "6ff4f458be05da7f1afb123c97682809258486a4"
+}

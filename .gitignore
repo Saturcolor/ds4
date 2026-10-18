@@ -105,3 +105,8 @@ ds4-kernel-v41-tp-gates
 /tests/test_halo_shapes
 
 /ds4-kernel-halo-moe
+
+# Downloaded 1017 references and scorer outputs from the documented commands.
+/references-1017/
+/results-1017/
+/recomputed-results/

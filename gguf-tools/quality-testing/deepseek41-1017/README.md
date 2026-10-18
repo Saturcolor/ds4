@@ -1,89 +1,64 @@
-# DeepSeek V4.1 Flash1017 deep scorer
+# DeepSeek V4.1 Flash 1017 scorer
 
-Compare a 1017 GGUF with saved full-vocabulary reference logits from the original checkpoint, using identical frozen token histories. This is separate from `score_official`: it adds expanded text, vision, long continuations and 4K–128K context panels. It measures quantization and runtime divergence, not task accuracy.
+Compare a 1017 GGUF with saved full-vocabulary logits from the original checkpoint. The default is the 100-case panel; vision, longer continuations and 4K–128K context checks are optional. The [reference dataset](https://huggingface.co/datasets/kyuz0/deepseek-v4.1-flash-1017-qa) contains the exact prompts, token histories and native outputs, so running the original model again is unnecessary.
 
-Exact checkpoint: `deepseek-ai/DeepSeek-V4.1-Flash-1017@1bae0e1088993b9b82de08f59de5be5a34e42170`. Older V4.1 and V4 Flash 0731 artifacts are rejected. The native reference uses the original mixed FP8/FP4 weights; it is not a BF16 replacement or hosted top-N approximation.
+## Run the 100-case panel
 
-## Build once
-
-Use Python 3.11+ and the ROCm development environment for this fork:
+Use a ROCm development container with enough memory for the GGUF. The collector is tested on ROCm 10.0/gfx1151; it has not been qualified on Metal. Run these commands from the repository root:
 
 ```sh
 python3 -m pip install -r gguf-tools/quality-testing/deepseek41-1017/requirements.txt
 make -j4 deep-score-rocm ROCM_ARCH=gfx1151
+
+python3 gguf-tools/quality-testing/deepseek41-1017/download.py --out references-1017
+
+python3 gguf-tools/quality-testing/deepseek41-1017/score.py \
+  --model /models/DeepSeek-V4.1-Flash-1017-Q2.gguf \
+  --references references-1017 --out results-1017
 ```
 
-Use the same source overlays and runtime as your inference build. The included 1017 vision checkpoint change only validates the matching encoder revision; it changes no preprocessing or inference equations. The build target is ROCm 10.0/gfx1151; use the matching 1017 BF16 vision encoder with the Q2 language model.
+The downloader fetches only the selected panel, pins the dataset revision and resumes interrupted transfers through the Hub client. It checks the extracted collection identity and case coverage. Completed installations are reused; existing unrelated directories are not overwritten. Allow about 7.5 GB of free disk for the default download and extraction, plus space for the candidate captures.
 
-## Run
+Open `results-1017/report.md`. It shows native and candidate NLL, their difference, forward KL and top-token agreement. Lower NLL difference and KL mean closer agreement with the native reference; top-token agreement is not task accuracy. The reference uses the original mixed FP8/FP4 release, not a BF16 replacement or hosted top-k log probabilities.
 
-With the reference bundle and model already on disk:
+The published Q2 completed all 100 cases and 6,159 scored positions:
+
+| Native NLL | Q2 NLL | ΔNLL | Forward KL | Top-token agreement |
+|---:|---:|---:|---:|---:|
+| 0.363260 | 0.456892 | +0.093632 | 0.129874 | 90.03% |
+
+The NLL definition matches DwarfStar's `avg_nll`. These prompts and continuation targets come from the September 19 V4.1 Flash panel, re-tokenized and evaluated on the 1017 checkpoint. Historical scores from a different checkpoint are not interchangeable.
+
+## Choose another panel
+
+Pass the same selection to both `download.py` and `score.py`:
+
+| Selection | Cases | Scored positions |
+|---|---:|---:|
+| `--suite short` (default) | 100 | 6,159 |
+| `--suite text` | 1,000 | 42,856 |
+| `--suite vision` | 32 | 252 |
+| `--suite long` | 24 | 66,299 |
+| `--suite deep` | 36 | 13,824 |
+| `--suite controls` | 2 | 256 |
+| `--suite all` | 1,094 | 123,487 |
+
+Use repeated `--panel NAME` arguments to select individual panels. Add `--vision /models/DeepSeek-V4.1-Flash-1017-vision-BF16.gguf` when scoring vision; its image assets are downloaded automatically. Add `--limit N` to the scorer for an explicitly partial run. Long and deep panels repeat long prefills and take substantially longer than the default.
+
+Use a new output directory for each candidate, or add `--resume` to continue an interrupted run. Completed captures are retained, including their raw FP32 vectors and per-position metrics. Candidate logits need about 3.2 GB for the default panel or 64 GB for all panels.
+
+All comparisons use identical frozen histories and temperature-1 distributions. The long-generation panels score saved native continuations rather than independent candidate solutions; all four native long traces reached their 4,096-token cap. Deep-context oracle answers are teacher-forced. The pilot and prefill control overlap, so suite totals count case occurrences rather than independent questions.
+
+## Analyse saved captures on CPU
+
+No model load, API key or GPU is needed to recompute an existing capture:
 
 ```sh
 python3 gguf-tools/quality-testing/deepseek41-1017/score.py \
-  --model /path/DeepSeek-V4.1-Flash-1017-Q2.gguf \
-  --vision /path/DeepSeek-V4.1-Flash-1017-vision-BF16.gguf \
-  --references /path/1017-references --out /path/results
+  --references references-1017 --existing-runs candidate-runs \
+  --out recomputed-results
 ```
 
-The default is the routine 100-case short panel. Run with the GPU available for this model. The reference runtime and original native model weights are not needed; no API key, hosted inference or paid server is used. GGUF checks read metadata and file stats, without an independent full-model checksum pass.
+For captures exported by another engine as per-case `case.json` and FP32 logit chunks, use `score_collections.py --reference references-1017/short100 --candidate candidate/short100 --out comparison`. The candidate must preserve the frozen token IDs, targets, scored positions and tokenizer identity; see [the capture format](CAPTURE-FORMAT.md).
 
-| Suite | Coverage | Cases | Scored positions |
-| --- | --- | ---: | ---: |
-| `short` | Routine 100-case comparison | 100 | 6,159 |
-| `text` | Short plus expanded text | 1,000 | 42,856 |
-| `vision` | 32 image cases,40 image occurrences | 32 | 252 |
-| `long` | Context compatibility, four native generation histories, fixed long continuations | 24 | 66,299 |
-| `deep` | Six task types across 4K, 8K, 16K, 32K, 64K, 128K context buckets | 36 | 13,824 |
-| `controls` | Native generation pilot and prefill control on the same 128-token history | 2 | 256 |
-| `all` | All nine panels | 1,094 | 123,487 |
-
-Use `--suite vision`, `--suite long` or `--suite deep` when those features need checking; `--suite all` explicitly selects all nine panels. Select individual panels with repeated `--panel`, for example `--panel compatibility-long12`. For an explicit smoke subset, add `--limit 1`; the report marks it as partial coverage. Long/deep suites repeat long prefills and can take much longer than the routine panel. Candidate raw logits use about 64 GB for all panels and remain available for later analysis.
-
-Resume with the same command plus `--resume`. Completed panels are reused. A successful native collection can be compared again without rerunning inference; interrupted collections are retained in separate attempts. There is no inference timeout. Ctrl-C preserves evidence and stops the owned native process.
-
-## Results
-
-Open `report.md` for panel NLL, ΔNLL, forward KL and strict top-token agreement, with task-group, context-bucket, scored-position-type and image-aligner summaries. Rows weight scored positions; groups can have very different token counts, which are shown explicitly. `summary.json` and each panel's `SCORE.json` retain Jensen–Shannon divergence, total variation, entropy, probability regret, centered-logit RMSE, case-bootstrap confidence intervals and worst cases. Per-position arrays and raw full-vocabulary logits are retained.
-
-NLL has the same meaning as the original scorer's `avg_nll`: average negative log probability of the frozen continuation tokens. The short panel reuses the V4.1 Flash September 19 prompts/continuations, with exact official 1017 token IDs and new 1017 native reference logits. Compare GGUFs on these same frozen targets and settings; historical scores from another checkpoint or tokenizer are not interchangeable. ΔNLL is candidate minus native NLL; positive means less probability assigned to the reference targets. Top-token agreement is a separate distribution check, not the percentage of correct answers.
-
-Missing cases, wrong token IDs/positions, nonfinite vectors, changed files and mismatched checkpoint identities are errors. There is no combined quality percentage or universal pass threshold. Results include both quantization and runtime arithmetic. Image results include the complete preprocessing/encoder pipeline; aligner cosine/RMSE compare natural features before prompt-sentinel insertion.
-
-The generation-history panels teacher-force saved native continuations. They do not measure independent candidate task success; all four long native traces reached their 4,096-token caps. Pilot/control histories overlap, so case counts are occurrences, not independent questions. Native numerical controls are shown separately and are never subtracted as an error floor. Hidden states, router traces and the original head remain available in the reference bundle as reference-only diagnostics; no uncollected candidate probes are claimed.
-
-The deep-context panel scores 384 selected positions per case: prompt/boundary probes and tokens of a known oracle answer. Context buckets label the case's total input length; the scored-position-type rows separate answer-token metrics from prompt probes. Oracle answers are teacher-forced, so these measurements do not establish independently generated answer accuracy.
-
-## Reuse existing captures
-
-Compare saved `PANEL/pack` outputs or this runner's completed native captures entirely on CPU:
-
-```sh
-python3 gguf-tools/quality-testing/deepseek41-1017/score.py \
-  --references /path/1017-references --existing-runs /path/candidate-runs \
-  --suite short --out /path/recomputed-results
-```
-
-This validates every selected full vector and retains any original exit records. It does not infer a successful original collector exit from the presence of raw files.
-
-Point `--existing-runs` at the original result directory to recompute metrics with a changed analysis script, without loading the model or repeating GPU inference. New native captures retain relative payload locations so the result directory can be moved together.
-
-## Reference bundle
-
-Large data stays outside Git. [references.json](references.json) pins all nine collection identities, case counts and token denominators. Build a portable directory from the saved native captures, evaluated images and numerical-control archive:
-
-```sh
-python3 gguf-tools/quality-testing/deepseek41-1017/bundle.py \
-  --source /path/native-references --images /path/vision-qa-images \
-  --controls /path/native-controls-v1.tar.gz --out /path/1017-references
-```
-
-The bundler preserves all reference payloads, including hidden/router data and vision features. It hardlinks on the same filesystem and copies across filesystems. It never changes source permissions or deletes source data. Logit payload integrity is verified when scoring.
-
-## Checks
-
-After building the helper, run the protocol/coverage tests without loading a model:
-
-```sh
-python3 -m unittest discover -s gguf-tools/quality-testing/deepseek41-1017/tests -v
-```
+The panel archives also preserve hidden states, expert routing and vision features for further analysis. `download.py --diagnostics` adds the shared original output head and raw numerical controls; ordinary scoring does not use it. Native numerical controls are reported separately and are not subtracted from divergence. Missing cases, wrong token histories, nonfinite vectors and changed payloads are rejected.
