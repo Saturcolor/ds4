@@ -19,7 +19,7 @@ python3 gguf-tools/quality-testing/deepseek41-1017/score.py \
 
 The downloader fetches only the selected panel, pins the dataset revision and resumes interrupted transfers through the Hub client. It checks the extracted collection identity and case coverage. Completed installations are reused; existing unrelated directories are not overwritten. Allow about 7.5 GB of free disk for the default download and extraction, plus space for the candidate captures.
 
-Open `results-1017/report.md`. It shows native and candidate NLL, their difference, forward KL and top-token agreement. Lower NLL difference and KL mean closer agreement with the native reference; top-token agreement is not task accuracy. The reference uses the original mixed FP8/FP4 release, not a BF16 replacement or hosted top-k log probabilities.
+Open `results-1017/report.md`. It shows native and candidate NLL, their difference, forward KL and top-token agreement. Lower KL means closer agreement with the native distribution. ΔNLL is candidate NLL minus native NLL; a positive value means less probability assigned to the frozen targets on average. Top-token agreement is not task accuracy. The reference uses the original mixed FP8/FP4 release, not a BF16 replacement or hosted top-k log probabilities.
 
 The published Q2 completed all 100 cases and 6,159 scored positions:
 
