@@ -50,6 +50,8 @@ Missing cases, wrong token IDs/positions, nonfinite vectors, changed files and m
 
 The generation-history panels teacher-force saved native continuations. They do not measure independent candidate task success; all four long native traces reached their 4,096-token caps. Pilot/control histories overlap, so case counts are occurrences, not independent questions. Native numerical controls are shown separately and are never subtracted as an error floor. Hidden states, router traces and the original head remain available in the reference bundle as reference-only diagnostics; no uncollected candidate probes are claimed.
 
+The deep-context panel scores 384 selected positions per case: prompt/boundary probes and tokens of a known oracle answer. Context buckets label the case's total input length; the scored-position-type rows separate answer-token metrics from prompt probes. Oracle answers are teacher-forced, so these measurements do not establish independently generated answer accuracy.
+
 ## Reuse existing captures
 
 Compare saved `PANEL/pack` outputs or this runner's completed native captures entirely on CPU:
